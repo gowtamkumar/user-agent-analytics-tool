@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>User-Agent Analytics</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="stylesheet" href="/style.css" />
+  </head>
+  <body>
+    <h1>User-Agent Analytics Dashboard</h1>
+    <canvas id="agentChart" width="600" height="400"></canvas>
+
+    <script>
+      async function loadData() {
+        const res = await fetch("/analytics/data");
+        const data = await res.json();
+
+        const labels = Object.keys(data);
+        const counts = Object.values(data);
+
+        const ctx = document.getElementById("agentChart").getContext("2d");
+        new Chart(ctx, {
+          type: "bar",
+          data: {
+            labels: labels,
+            datasets: [
+              {
+                label: "User-Agent Count",
+                data: counts,
+                backgroundColor: "rgba(54, 162, 235, 0.6)",
+                borderColor: "rgba(54, 162, 235, 1)",
+                borderWidth: 1,
+              },
+            ],
+          },
+          options: {
+            responsive: true,
+            scales: {
+              y: { beginAtZero: true },
+            },
+          },
+        });
+      }
+
+      loadData();
+    </script>
+  </body>
+</html>
